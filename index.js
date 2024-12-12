@@ -16,12 +16,14 @@ app.use(cors(corsOptions));
 app.use(express.json());
 initializeDB();
 
-// const jsonData = fs.readFileSync("products.json", "utf-8");
+const jsonData = fs.readFileSync("products.json", "utf-8");
 
-// const productsData = JSON.parse(jsonData);
+const productsData = JSON.parse(jsonData);
 
 async function createProducts(productData) {
   try {
+    // const products = new Products(productData);
+    // await products.save();
     productData.forEach((item) => {
       const products = new Products(item);
       products.save();
@@ -30,7 +32,7 @@ async function createProducts(productData) {
     throw error;
   }
 }
-//createProducts(productsData);
+createProducts(productsData);
 
 // to find all the movies
 
@@ -42,7 +44,7 @@ const getAllProducts = async () => {
     throw error;
   }
 };
-app.get("/products", async (req, res) => {
+app.get("/api/products", async (req, res) => {
   try {
     const products = await getAllProducts();
     if (products.length != 0) {
