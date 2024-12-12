@@ -46,7 +46,7 @@ app.get("/products", async (req, res) => {
   try {
     const products = await getAllProducts();
     if (products.length != 0) {
-      res.json(movies);
+      res.json(products);
     } else {
       res.status(404).json({ error: "No products found" });
     }
