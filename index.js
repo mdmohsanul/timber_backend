@@ -1504,7 +1504,7 @@ async function createProducts(productData) {
 
 const getAllProducts = async () => {
   try {
-    const products = await Products.find();
+    const products = await Products.findOne();
     return products;
   } catch (error) {
     throw error;
@@ -1514,7 +1514,7 @@ app.get("/api/products", async (req, res) => {
   try {
     const data = await getAllProducts();
     if (data.length != 0) {
-      res.json(data);
+      res.json({ data });
     } else {
       res.status(404).json({ error: "No products found" });
     }
