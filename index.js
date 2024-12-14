@@ -16,23 +16,26 @@ app.use(cors(corsOptions));
 app.use(express.json());
 initializeDB();
 
-// const jsonData = fs.readFileSync("products.json", "utf-8");
-
-// const productsData = JSON.parse(jsonData);
+//---------- read a json file then seed the data into the data base -------------------
+const jsonData = fs.readFileSync("./data/products.json", "utf-8");
+const productsData = JSON.parse(jsonData);
+//console.log(productsData);
 
 async function createProducts(productData) {
   try {
-    // const products = new Products(productData);
-    // await products.save();
-    productData.forEach((item) => {
-      const products = new Products(item);
-      products.save();
-    });
+    const products = new Products(productData);
+    await products.save();
+    // await Products.create(productData);
+    //------------ if the data is an array then loop through it and then save it --------------------
+    // productData.forEach((item) => {
+    //   const products = new Products.data.products(item);
+    //   products.save();
+    // });
   } catch (error) {
     throw error;
   }
 }
-//createProducts(productsData);
+createProducts(productsData);
 
 // to find all the movies
 
@@ -54,6 +57,26 @@ app.get("/api/products", async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch products" });
+  }
+});
+
+//---------------------------------- how to add a single object data into database -------------------------------------------
+
+async function insertProduct(productData) {
+  try {
+    const product = new Products(productData);
+    const updatedProduct = product.save();
+    return updatedProduct;
+  } catch (error) {
+    throw error;
+  }
+}
+app.post("/api/products", async (req, res) => {
+  try {
+    const product = await insertProduct(req.body);
+    res.status(200).json({ message: "product added successfully, ", product });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update data ", error });
   }
 });
 
