@@ -49,9 +49,9 @@ const getAllProducts = async () => {
 };
 app.get("/api/products", async (req, res) => {
   try {
-    const productss = await getAllProducts();
-    if (productss.length != 0) {
-      res.json({ productss });
+    const data = await getAllProducts();
+    if (data.length != 0) {
+      res.json({ data });
     } else {
       res.status(404).json({ error: "No products found" });
     }
