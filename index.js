@@ -1498,7 +1498,7 @@ async function createProducts(productData) {
     throw error;
   }
 }
-createProducts(productsData);
+//createProducts(productsData);
 
 // to find all the movies
 
