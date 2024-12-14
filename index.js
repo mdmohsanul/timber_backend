@@ -17,8 +17,8 @@ app.use(express.json());
 initializeDB();
 
 //---------- read a json file then seed the data into the data base -------------------
-const jsonData = fs.readFileSync("./data/products.json", "utf-8");
-const productsData = JSON.parse(jsonData);
+// const jsonData = fs.readFileSync("./data/products.json", "utf-8");
+// const productsData = JSON.parse(jsonData);
 //console.log(productsData);
 
 async function createProducts(productData) {
@@ -35,7 +35,7 @@ async function createProducts(productData) {
     throw error;
   }
 }
-createProducts(productsData);
+//createProducts(productsData);
 
 // to find all the movies
 
