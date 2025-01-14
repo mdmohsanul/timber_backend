@@ -1,0 +1,3 @@
+- Create a folder
+- npm init -y
+- npm i mongoose dotenv express cors
