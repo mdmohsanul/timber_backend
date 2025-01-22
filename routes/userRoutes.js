@@ -1,11 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/userModel");
+const app = express();
 
 // Secret Key
 const JWT_SECRET = "supersecretkey";
 
-app.post("/signup", async (req, res) => {
+router.post("/signup", async (req, res) => {
   const { username, email, password } = req.body;
 
   try {
@@ -22,7 +23,7 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-app.post("/login", async (req, res) => {
+router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -48,7 +49,7 @@ app.post("/login", async (req, res) => {
 });
 
 // Protected Route
-app.get("/protected", (req, res, next) => {
+router.get("/protected", (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) {
     return res.status(401).json({ message: "No token provided" });
