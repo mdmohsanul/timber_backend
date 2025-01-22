@@ -63,3 +63,5 @@ router.get("/protected", (req, res, next) => {
     res.status(403).json({ message: "Invalid token" });
   }
 });
+
+module.exports = router;
