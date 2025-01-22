@@ -2,19 +2,23 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/userModel");
 const app = express();
+const bcrypt = require("bcryptjs");
 
 // Secret Key
 const JWT_SECRET = "supersecretkey";
 
 router.post("/signup", async (req, res) => {
-  const { username, email, password } = req.body;
+  const { userName, email, password } = req.body;
+  console.log(userName);
+  console.log(email);
+  console.log(password);
 
   try {
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Save user to DB
-    const user = new User({ username, email, password: hashedPassword });
+    const user = new User({ userName, email, password: hashedPassword });
     await user.save();
 
     res.status(201).json({ message: "User registered successfully" });
