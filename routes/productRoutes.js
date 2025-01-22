@@ -3,7 +3,7 @@ const router = express.Router();
 const Product = require("../models/productModel");
 
 // GET /api/products
-router.get("/products", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const products = await Product.find({});
     res.status(200).json({
@@ -17,7 +17,7 @@ router.get("/products", async (req, res) => {
 });
 
 // GET /api/products/:productId - Fetch a product by productId
-router.get("/products/:_id", async (req, res) => {
+router.get("/:_id", async (req, res) => {
   try {
     const { _id } = req.params;
     const product = await Product.findOne({ _id }); // Find product by productId
