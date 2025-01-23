@@ -1,3 +1,5 @@
 - Create a folder
 - npm init -y
 - npm i mongoose dotenv express cors
+- npm i jsonwebtoken
+- npm i bcryptjs

@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const { initializeDB } = require("./config/db.connect");
 const productRoutes = require("./routes/productRoutes");
 const userRoutes = require("./routes/userRoutes");
+const addressRoutes = require("./routes/addressRoutes");
 
 const app = express();
 dotenv.config();
@@ -20,12 +21,13 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-// Middleware
+// Middleware -- bcoz every data that comes is in json Form
 app.use(express.json());
 
 // Import Routes
 app.use("/api/products", productRoutes);
 app.use("/api", userRoutes);
+app.use("/address", addressRoutes);
 
 // Start Server
 const PORT = process.env.PORT || 5000;

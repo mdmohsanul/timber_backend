@@ -8,13 +8,11 @@ const bcrypt = require("bcryptjs");
 const JWT_SECRET = "supersecretkey";
 
 router.post("/signup", async (req, res) => {
+  //get all data
   const { userName, email, password } = req.body;
-  console.log(userName);
-  console.log(email);
-  console.log(password);
 
   try {
-    // Hash the password
+    // Hash or encrypt the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Save user to DB
@@ -28,14 +26,22 @@ router.post("/signup", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
+  //get all data
   const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(401).json({ message: "Invalid credentials" });
+    // validation
+    if (!(email && password)) {
+      return res.status(401).json({ message: "Enter valid email & password" });
     }
 
+    // find user in db
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: "User not exists!" });
+    }
+
+    // match the password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).json({ message: "Invalid credentials" });
@@ -46,6 +52,11 @@ router.post("/login", async (req, res) => {
       expiresIn: "1h",
     });
 
+    /*
+     *  Now we have to send token and user Data to client
+     *  So we don't want to send password
+     */
+    user.password = undefined;
     res.status(200).json({ message: "Login successful", token, user });
   } catch (error) {
     res.status(500).json({ message: "Error logging in", error });
