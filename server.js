@@ -31,7 +31,7 @@ app.use("/api/products", productRoutes);
 app.use("/api", userRoutes);
 app.use("/address", addressRoutes);
 app.use("/api/cart", cartRoutes);
-app.use("api/wishlist", wishlistRoutes);
+app.use("/api/wishlist", wishlistRoutes);
 
 // Start Server
 const PORT = process.env.PORT || 5000;
