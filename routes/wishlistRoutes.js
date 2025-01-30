@@ -33,4 +33,31 @@ router.post("/", async (req, res) => {
   }
 });
 
+// remove a product from wishlist
+
+router.delete("/user/:userId/products/:productId", async (req, res) => {
+  try {
+    const { userId, productId } = req.params;
+    console.log(userId);
+    console.log(productId);
+
+    //Find the user and remove the specific product
+    const result = await Wishlist.findOneAndUpdate(
+      { userId: userId },
+      {
+        $pull: { products: productId },
+      }, // Match the nested productId
+      { new: true } // Return the updated document
+    );
+    if (!result) {
+      return res.status(401).json({ message: "User or product not found" });
+    }
+    res
+      .status(200)
+      .json({ message: "Wishlist Product removed successfully", data: result });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;
