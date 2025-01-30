@@ -35,7 +35,7 @@ router.post("/", async (req, res) => {
 
 // remove a product from wishlist
 
-router.delete("/user/:userId/products/:productId", async (req, res) => {
+router.delete("/user/:userId/product/:productId", async (req, res) => {
   try {
     const { userId, productId } = req.params;
     console.log(userId);
