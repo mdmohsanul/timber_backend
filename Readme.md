@@ -6,8 +6,14 @@
 
 {
 "version": 2,
-"builds": [{ "src": "server.js", "use": "@vercel/node" }],
-"rewrites": [{ "source": "/(.*)", "destination": "server.js" }] ,
+"builds": [
+{ "src": "server.js", "use": "@vercel/node" },
+{ "src": "/index.html", "use": "@vercel/static" }
+],
+"routes": [
+{ "src": "/api/(.*)", "destination": "/server.js" },
+{ "src": "/(.*)", "destination": "/index.html" }
+],
 "headers": [
 {
 "source": "/api/(._)",
