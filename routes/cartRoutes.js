@@ -42,7 +42,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// remove product from cart
+// remove a product from cart
 
 router.delete("/user/:userId/products/:productId", async (req, res) => {
   try {
@@ -66,6 +66,30 @@ router.delete("/user/:userId/products/:productId", async (req, res) => {
     res
       .status(200)
       .json({ message: "Product removed successfully", data: result });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "An error occurred", error: error.message });
+  }
+});
+
+// remove all products from cart
+
+router.delete("/user/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    console.log(userId);
+    if (!userId) {
+      return res.status(401).json({ message: "User not found" });
+    }
+    const result = await Cart.findOneAndUpdate(
+      { userId }, // Match the cart by userId
+      { $set: { products: [] } }, // Clear the products array
+      { new: true } // Return the updated document
+    );
+    res
+      .status(200)
+      .json({ message: "Products removed successfully", data: result });
   } catch (error) {
     res
       .status(500)
