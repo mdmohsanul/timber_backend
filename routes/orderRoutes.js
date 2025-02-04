@@ -8,8 +8,16 @@ router.get("/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
     console.log(userId);
-    const cart = await Order.findOne({ userId }).populate("products.productId");
-    res.status(200).json(cart);
+    const orders = await Order.findOne({ userId }).populate(
+      "products.productId"
+    );
+    if (orders.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No orders found for this user." });
+    }
+
+    res.status(200).json(orders);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -18,25 +26,27 @@ router.get("/:userId", async (req, res) => {
 // Add product to order list
 router.post("/", async (req, res) => {
   try {
-    const { userId, productId, quantity } = req.body;
+    const { userId, products } = req.body;
     let order = await Order.findOne({ userId });
 
-    if (!order) {
-      order = new Order({ userId, products: [{ productId, quantity }] });
-    } else {
-      const productIndex = order.products.findIndex(
-        (p) => p.productId.toString() === productId
-      );
-      if (productIndex > -1) {
-        order.products[productIndex].quantity += quantity;
-      } else {
-        order.products.push({ productId, quantity });
-      }
+    // validate request
+    if (!userId || !products || products.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "User ID and products are required" });
     }
+    // calculate total amount
+    const totalPrice = products.reduce(
+      (acc, item) => acc + item.productId.price * item.quantity,
+      0
+    );
 
-    await order.save();
+    const newOrder = new Order({ userId, products, totalPrice });
+    const savedOrder = await newOrder.save();
 
-    res.status(200).json(order);
+    res
+      .status(201)
+      .json({ message: "Order created successfully", order: savedOrder });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
