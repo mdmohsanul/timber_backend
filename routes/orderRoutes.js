@@ -7,15 +7,15 @@ const Order = require("../models/orderModel");
 router.get("/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
-    console.log(userId);
+
     const orders = await Order.find({ userId })
       .populate("products.productId")
       .sort({ createdAt: -1 });
-    if (orders.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "No orders found for this user.", orders });
-    }
+    // if (orders.length === 0) {
+    //   return res
+    //     .status(404)
+    //     .json({ message: "No orders found for this user.", orders });
+    // }
 
     res.status(200).json(orders);
   } catch (error) {
