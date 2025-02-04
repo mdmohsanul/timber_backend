@@ -8,7 +8,7 @@ router.get("/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
     console.log(userId);
-    const orders = await Order.findOne({ userId })
+    const orders = await Order.find({ userId })
       .populate("products.productId")
       .sort({ createdAt: -1 });
     if (orders.length === 0) {
