@@ -28,7 +28,7 @@ router.post("/", async (req, res) => {
   try {
     const { userId, products } = req.body;
     let order = await Order.findOne({ userId });
-
+    console.log(products);
     // validate request
     if (!userId || !products || products.length === 0) {
       return res
@@ -37,7 +37,7 @@ router.post("/", async (req, res) => {
     }
     // calculate total amount
     const totalPrice = products.reduce(
-      (acc, item) => acc + item.productId.price * item.quantity,
+      (acc, item) => acc + item.price * item.quantity,
       0
     );
 
