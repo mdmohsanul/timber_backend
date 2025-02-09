@@ -36,10 +36,9 @@ router.post("/", async (req, res) => {
         .json({ message: "User ID and products are required" });
     }
     // calculate total amount
-    const totalPrice = products.reduce(
-      (acc, item) => acc + item.price * item.quantity,
-      0
-    );
+    const totalPrice = products
+      .reduce((acc, item) => acc + item.price * item.quantity, 0)
+      .toFixed(2);
 
     const newOrder = new Order({ userId, products, totalPrice });
     const savedOrder = await newOrder.save();
