@@ -26,7 +26,7 @@ router.post("/", async (req, res) => {
   } = req.body;
 
   try {
-    if (!(name && mobileNum && pincode && fullAddress)) {
+    if (!(name || mobileNum || pincode || fullAddress)) {
       return res
         .status(400)
         .json({ message: "Please fill the required fields" });

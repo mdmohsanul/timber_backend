@@ -70,7 +70,7 @@ router.post("/login", async (req, res) => {
 });
 
 // Protected Route
-router.get("/protected", (req, res, next) => {
+router.get("/protected", async (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) {
     return res.status(401).json({ message: "No token provided" });
@@ -78,6 +78,14 @@ router.get("/protected", (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
+    // If Token is verified then user is attached to req.loginUser
+    req.loginUser = await User.findById(decoded.loginUser._id).select(
+      "-password"
+    );
+    // Set user in req
+    if (!req.loginUser)
+      return res.status(404).json({ message: "User not found" });
+
     res.status(200).json({ message: "Access granted", user: decoded });
     next();
   } catch (error) {
