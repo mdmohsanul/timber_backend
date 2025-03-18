@@ -43,6 +43,7 @@ router.post("/login", async (req, res) => {
 
     // find user in db
     const user = await User.findOne({ email });
+    console.log(user);
     if (!user) {
       return res.status(401).json({ message: "User not found!" });
     }
@@ -54,7 +55,7 @@ router.post("/login", async (req, res) => {
     }
 
     // Generate JWT
-    const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, {
+    const token = jwt.sign({ user }, JWT_SECRET, {
       expiresIn: "1h",
     });
 
@@ -72,6 +73,7 @@ router.post("/login", async (req, res) => {
 // Protected Route
 router.get("/protected", async (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
+  // console.log(token);
   if (!token) {
     return res.status(401).json({ message: "No token provided" });
   }
@@ -79,14 +81,14 @@ router.get("/protected", async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     // If Token is verified then user is attached to req.loginUser
-    req.loginUser = await User.findById(decoded.loginUser._id).select(
-      "-password"
-    );
-    // Set user in req
-    if (!req.loginUser)
-      return res.status(404).json({ message: "User not found" });
+    // console.log(decoded);
+    // console.log(decoded._id);
+    const loggedInUser = await User.findById(decoded.id).select("-password");
+    // // Set user in req
+    // if (!req.user) return res.status(404).json({ message: "User not found" });
+    console.log(loggedInUser);
 
-    res.status(200).json({ message: "Access granted", user: decoded });
+    res.status(200).json({ message: "Access granted", user: loggedInUser });
     next();
   } catch (error) {
     res.status(403).json({ message: "Invalid token" });
