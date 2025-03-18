@@ -12,6 +12,12 @@ router.post("/signup", async (req, res) => {
   const { userName, email, password } = req.body;
 
   try {
+    if (!userName || !email || !password) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+    const existingUser = await User.findOne({ email });
+    if (existingUser)
+      return res.status(400).json({ error: "User already exists" });
     // Hash or encrypt the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -31,14 +37,14 @@ router.post("/login", async (req, res) => {
 
   try {
     // validation
-    if (!(email && password)) {
+    if (!(email || password)) {
       return res.status(401).json({ message: "Enter valid email & password" });
     }
 
     // find user in db
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json({ message: "User not exists!" });
+      return res.status(401).json({ message: "User not found!" });
     }
 
     // match the password
