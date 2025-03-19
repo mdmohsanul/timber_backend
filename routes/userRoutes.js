@@ -73,7 +73,9 @@ router.post("/login", async (req, res) => {
 // Protected Route
 router.get("/protected", async (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
-  // console.log(token);
+  // const token = req.headers.authorization;
+
+  // console.log(req.headers.authorization);
   if (!token) {
     return res.status(401).json({ message: "No token provided" });
   }
@@ -83,10 +85,12 @@ router.get("/protected", async (req, res, next) => {
     // If Token is verified then user is attached to req.loginUser
     // console.log(decoded);
     // console.log(decoded._id);
-    const loggedInUser = await User.findById(decoded.id).select("-password");
+    const loggedInUser = await User.findById(decoded.user._id).select(
+      "-password"
+    );
     // // Set user in req
     // if (!req.user) return res.status(404).json({ message: "User not found" });
-    console.log(loggedInUser);
+    // console.log(loggedInUser);
 
     res.status(200).json({ message: "Access granted", user: loggedInUser });
     next();
