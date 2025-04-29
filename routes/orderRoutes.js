@@ -68,7 +68,7 @@ const MAX_RAZORPAY_AMOUNT = 100000000;
 
 router.post("/create-order", async (req, res) => {
   const { amount } = req.body;
-
+  console.log(typeof amount, amount);
   if (!amount || isNaN(amount)) {
     return res
       .status(400)
