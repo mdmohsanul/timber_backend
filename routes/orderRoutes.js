@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const Order = require("../models/orderModel");
+require("dotenv").config();
+const Razorpay = require("razorpay");
 
 // get all orders
 
@@ -47,6 +49,28 @@ router.post("/", async (req, res) => {
     res.status(201).json(savedOrder);
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+// create order route
+
+const razorpayInstance = new Razorpay({
+  key_id: process.env.RAZOR_ID,
+  key_secret: process.env.RAZOR_SECRET_KEY,
+});
+
+router.post("/create-order", async (req, res) => {
+  const { amount } = req.body;
+  try {
+    const orderOptions = {
+      amount: amount * 100, // convert to paise
+      currency: "INR",
+      receipt: `reciept_${Math.random() * 1000000}`,
+    };
+    const order = await razorpayInstance.orders.create(orderOptions);
+    res.json({ orderId: order });
+  } catch (error) {
+    res.status(500).json({ error: "Error creating razorpay order" });
   }
 });
 
