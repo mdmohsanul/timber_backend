@@ -18,7 +18,7 @@ initializeDB();
 const cors = require("cors");
 
 const allowedOrigins = [
-  "https://timber-backend.vercel.app",
+  "https://timber-weld.vercel.app",
   "http://localhost:5173",
 ];
 
