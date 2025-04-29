@@ -17,11 +17,23 @@ initializeDB();
 // CORS Policy
 const cors = require("cors");
 
+const allowedOrigins = [
+  "https://timber-backend.vercel.app",
+  "http://localhost:3000",
+];
+
 const corsOptions = {
-  origin: "https://timber-backend.vercel.app/",
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
   optionSuccessStatus: 200,
 };
+
 app.use(cors(corsOptions));
 
 // Middleware -- bcoz every data that comes is in json Form
