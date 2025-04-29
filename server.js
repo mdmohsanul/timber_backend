@@ -19,7 +19,6 @@ const cors = require("cors");
 
 const allowedOrigins = [
   "https://timber-backend.vercel.app",
-  "http://localhost:5000",
   "http://localhost:5173",
 ];
 

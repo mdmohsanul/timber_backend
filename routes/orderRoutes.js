@@ -61,18 +61,28 @@ const razorpayInstance = new Razorpay({
 
 router.post("/create-order", async (req, res) => {
   const { amount } = req.body;
-  console.log(amount);
+
+  if (!amount || isNaN(amount)) {
+    return res
+      .status(400)
+      .json({ error: "Amount is required and must be a number" });
+  }
+
   try {
     const orderOptions = {
-      amount: amount * 100, // convert to paise
+      amount: amount * 100,
       currency: "INR",
-      receipt: `reciept_${Math.random() * 1000000}`,
+      receipt: `receipt_${Math.floor(Math.random() * 1000000)}`,
     };
 
     const order = await razorpayInstance.orders.create(orderOptions);
-    res.json({ orderId: order });
+
+    res.status(200).json({ order }); // or just order.id
   } catch (error) {
-    res.status(500).json({ error: "Error creating razorpay order" });
+    console.error("Razorpay Error:", error);
+    res
+      .status(500)
+      .json({ error: "Error creating Razorpay order", details: error.message });
   }
 });
 
