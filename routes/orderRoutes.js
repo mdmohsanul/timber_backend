@@ -28,7 +28,7 @@ router.get("/:userId", async (req, res) => {
 // Add product to order list
 router.post("/", async (req, res) => {
   try {
-    const { userId, products } = req.body;
+    const { userId, products, paymentId, orderId } = req.body;
     let order = await Order.findOne({ userId });
     console.log(products);
     // validate request
@@ -42,7 +42,13 @@ router.post("/", async (req, res) => {
       .reduce((acc, item) => acc + item.price * item.quantity, 0)
       .toFixed(2);
 
-    const newOrder = new Order({ userId, products, totalPrice });
+    const newOrder = new Order({
+      userId,
+      products,
+      totalPrice,
+      paymentId,
+      orderId,
+    });
     const savedOrder = await newOrder.save();
 
     // res.status(201).json({ message: "Order created successfully", savedOrder });

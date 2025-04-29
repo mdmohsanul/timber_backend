@@ -18,6 +18,12 @@ const orderSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    paymentId: {
+      type: String,
+    },
+    orderId: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
