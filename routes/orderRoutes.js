@@ -84,7 +84,7 @@ router.post("/create-order", async (req, res) => {
 
     const order = await razorpayInstance.orders.create(orderOptions);
 
-    res.status(200).json({ order }); // or just order.id
+    res.status(200).json({ orderId: order.id }); // or just order.id
   } catch (error) {
     console.error("Razorpay Error:", error);
     res
