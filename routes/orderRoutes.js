@@ -61,6 +61,7 @@ const razorpayInstance = new Razorpay({
 
 router.post("/create-order", async (req, res) => {
   const { amount } = req.body;
+  console.log(amount);
   try {
     const orderOptions = {
       amount: amount * 100, // convert to paise
