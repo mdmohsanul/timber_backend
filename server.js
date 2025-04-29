@@ -18,7 +18,7 @@ initializeDB();
 const cors = require("cors");
 
 const corsOptions = {
-  origin: "*",
+  origin: "https://timber-backend.vercel.app/",
   credentials: true,
   optionSuccessStatus: 200,
 };
