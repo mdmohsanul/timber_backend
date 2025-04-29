@@ -58,6 +58,7 @@ const razorpayInstance = new Razorpay({
   key_id: process.env.RAZOR_ID,
   key_secret: process.env.RAZOR_SECRET_KEY,
 });
+const MAX_RAZORPAY_AMOUNT = 100000000;
 
 router.post("/create-order", async (req, res) => {
   const { amount } = req.body;
@@ -67,10 +68,16 @@ router.post("/create-order", async (req, res) => {
       .status(400)
       .json({ error: "Amount is required and must be a number" });
   }
+  const amountInPaise = amount * 100;
 
+  if (amountInPaise > MAX_RAZORPAY_AMOUNT) {
+    return res
+      .status(400)
+      .json({ error: "Amount exceeds Razorpay limit (₹10,00,000)." });
+  }
   try {
     const orderOptions = {
-      amount: amount * 100,
+      amount: amountInPaise,
       currency: "INR",
       receipt: `receipt_${Math.floor(Math.random() * 1000000)}`,
     };
