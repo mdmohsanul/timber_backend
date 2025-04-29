@@ -67,6 +67,9 @@ router.post("/create-order", async (req, res) => {
       currency: "INR",
       receipt: `reciept_${Math.random() * 1000000}`,
     };
+    console.log(razorpayInstance.key_id);
+    console.log(razorpayInstance.key_secret);
+
     const order = await razorpayInstance.orders.create(orderOptions);
     res.json({ orderId: order });
   } catch (error) {
