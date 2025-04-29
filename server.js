@@ -20,6 +20,7 @@ const cors = require("cors");
 const allowedOrigins = [
   "https://timber-backend.vercel.app",
   "http://localhost:3000",
+  "http://localhost:5173",
 ];
 
 const corsOptions = {
