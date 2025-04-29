@@ -54,25 +54,25 @@ router.post("/", async (req, res) => {
 
 // create order route
 
-// const razorpayInstance = new Razorpay({
-//   key_id: process.env.RAZOR_ID,
-//   key_secret: process.env.RAZOR_SECRET_KEY,
-// });
+const razorpayInstance = new Razorpay({
+  key_id: process.env.RAZOR_ID,
+  key_secret: process.env.RAZOR_SECRET_KEY,
+});
 
-// router.post("/create-order", async (req, res) => {
-//   const { amount } = req.body;
-//   try {
-//     const orderOptions = {
-//       amount: amount * 100, // convert to paise
-//       currency: "INR",
-//       receipt: `reciept_${Math.random() * 1000000}`,
-//     };
+router.post("/create-order", async (req, res) => {
+  const { amount } = req.body;
+  try {
+    const orderOptions = {
+      amount: amount * 100, // convert to paise
+      currency: "INR",
+      receipt: `reciept_${Math.random() * 1000000}`,
+    };
 
-//     const order = await razorpayInstance.orders.create(orderOptions);
-//     res.json({ orderId: order });
-//   } catch (error) {
-//     res.status(500).json({ error: "Error creating razorpay order" });
-//   }
-// });
+    const order = await razorpayInstance.orders.create(orderOptions);
+    res.json({ orderId: order });
+  } catch (error) {
+    res.status(500).json({ error: "Error creating razorpay order" });
+  }
+});
 
 module.exports = router;
