@@ -67,15 +67,16 @@ const razorpayInstance = new Razorpay({
 const MAX_RAZORPAY_AMOUNT = 100000000;
 
 router.post("/create-order", async (req, res) => {
-  const { amount } = req.body;
-  console.log(typeof amount, amount);
+  const amount = Number(req.body.amount);
+
   if (!amount || isNaN(amount)) {
     return res
       .status(400)
       .json({ error: "Amount is required and must be a number" });
   }
-  const amountInPaise = amount * 100;
 
+  const amountInPaise = amount * 100;
+  console.log(typeof amountInPaise, amountInPaise);
   if (amountInPaise > MAX_RAZORPAY_AMOUNT) {
     return res
       .status(400)
@@ -93,9 +94,11 @@ router.post("/create-order", async (req, res) => {
     res.status(200).json({ orderId: order.id }); // or just order.id
   } catch (error) {
     console.error("Razorpay Error:", error);
-    res
-      .status(500)
-      .json({ error: "Error creating Razorpay order", details: error.message });
+    res.status(500).json({
+      error: "Error creating Razorpay order",
+      details: error.message,
+      raw: error,
+    });
   }
 });
 
