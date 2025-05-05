@@ -76,7 +76,7 @@ router.post("/create-order", async (req, res) => {
   }
 
   const amountInPaise = amount * 100;
-  console.log(typeof amountInPaise, amountInPaise);
+
   if (amountInPaise > MAX_RAZORPAY_AMOUNT) {
     return res
       .status(400)
